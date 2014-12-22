@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Sockets Demo</title>
+    <link rel="stylesheet" href="./climacons/climacons-font.css" />
+    <style>
+        section, header, footer {
+            display: block;
+        }
+
+        body {
+            font-family: sans-serif;
+            color: #444;
+            line-height: 1.5;
+            font-size: 1em;
+        }
+
+        * {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .glyph {
+            font-size: 16px;
+            float: left;
+            text-align: center;
+            background: #eee;
+            padding: .75em;
+            margin: .75em 1.5em .75em 0;
+            width: 14em;
+            border-radius: .25em;
+            box-shadow: inset 0 0 0 1px #f8f8f8, 0 0 0 1px #CCC;
+        }
+
+            .glyph input {
+                width: 100%;
+                padding: 0.25em;
+                font-family: consolas, monospace;
+                text-align: center;
+                border: none;
+            }
+
+            .glyph input, .mtm {
+                margin-top: .75em;
+            }
+
+        .w-main {
+            width: 80%;
+        }
+
+        .centered {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .fs1 {
+            font-size: 3em;
+        }
+
+        header {
+            margin: 2em 0;
+            padding-bottom: .5em;
+            color: #666;
+            box-shadow: 0 2px #eee;
+        }
+
+            header h1 {
+                font-size: 2em;
+                font-weight: normal;
+            }
+
+        .clearfix:before, .clearfix:after {
+            content: "";
+            display: table;
+        }
+
+        .clearfix:after, .clear {
+            clear: both;
+        }
+
+        footer {
+            margin-top: 2em;
+            padding: .5em 0;
+            box-shadow: 0 -2px #eee;
+            font-size: 13px;
+        }
+
+        a, a:visited {
+            color: #FA4B00;
+            text-decoration: none;
+        }
+
+            a:hover, a:focus {
+                color: #000;
+            }
+
+        .box1 {
+            font-size: 13px;
+            display: inline-block;
+            padding: .25em .5em;
+            background: #eee;
+            margin: .5em 1em .5em 0;
+        }
+
+            .box1 .climacon {
+                font-size: 2em;
+                vertical-align: middle;
+            }
+    </style>
+    <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
+</head>
+
+<body>
+    <script>
+			var socket = io.connect('http://localhost');
+
+			socket.on('pong', function(msg) {
+				console.dir( msg );
+			});
+
+			socket.on('connect', function() {
+				socket.emit('ping', {msg: 'Hello'});
+			});
+
+			socket.on('packet', function (data) {
+			    try
+			    {
+			        var t = JSON.parse(data);
+			        if (t) {
+			            var ele = document.getElementById('current_temp');
+			            if (ele) {
+			                //console.log(t.data.Temp);
+			                ele.textContent = t.data.Temp;
+			            }
+			        }
+			     //   console.log(JSON.parse(data));
+			    }catch(ex)
+			    {
+			        //console.log(ex.message);
+			    }
+			});
+
+    </script>
+    <div class="glyph">
+        <span id="current_temp" class="fs1 climacon thermometer medium-low" aria-hidden="true">68</span>
+        <span class="fs1 climacon farenheit" aria-hidden="true"></span>
+    </div>
+</body>
+
+</html>
